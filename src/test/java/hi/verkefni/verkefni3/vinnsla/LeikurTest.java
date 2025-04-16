@@ -1,7 +1,5 @@
 package hi.verkefni.verkefni3.vinnsla;
 import static org.junit.Assert.*;
-
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +7,7 @@ public class LeikurTest {
     private Leikur game;
 
     @Before
-    public void setUp() {
+    public void gameStarts() {
         game = new Leikur(100);
         game.nyrLeikur();
     }
