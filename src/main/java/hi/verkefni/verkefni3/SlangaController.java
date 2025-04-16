@@ -63,28 +63,7 @@ public class SlangaController {
         fxDice.disableProperty().bind(fxNewGame.disableProperty().not());
 
         // Binda fxMessage1
-        fxMessage1.textProperty().bind(
-                Bindings.createStringBinding(() -> {
-                    Leikmadur currentPlayer = game.currentPlayerProperty().get();
-                    if (currentPlayer == null) {
-                        return "No players in game";
-                    }
-
-                    int currentBox = currentPlayer.getBox();
-                    int destination = game.getSnakesLadders().getDestinationBox(currentBox);
-
-                    System.out.println("Current box: " + currentBox + "Destination: " + destination);
-                    System.out.println(game.currentPlayerProperty().get().getName());
-
-                    if (currentBox == destination) {
-                        return "Engir snákar eða stigar\ná þessum reit";
-                    } else if (destination > currentBox) {
-                        return "Lentir á stiga!\nÞú fórst upp á reit " + destination;
-                    } else {
-                        return "Lentir á snák!\nÞú fórst niður á reit " + destination;
-                    }
-                }, game.currentPlayerProperty(), game.getCurrentPlayer().boxProperty(), game.nextPlayerProperty())
-        );
+        fxMessage1.setText("Leikur í gangi!");
 
         //Binda fxMessage2
         fxMessage2.textProperty().bind(Bindings.
@@ -111,12 +90,10 @@ public class SlangaController {
         //Færa leikmann 1
         game.getPlayer(0).boxProperty().addListener((observable, oldValue, newValue) -> {
             updatePlayerImage(0, oldValue.intValue(), newValue.intValue());
-            System.out.println("Player was updated and moved to the next cell");
         });
         //Færa leikmann 2
         game.getPlayer(1).boxProperty().addListener((observable, oldValue, newValue) -> {
             updatePlayerImage(1, oldValue.intValue(), newValue.intValue());
-            System.out.println("Player was updated and moved to the next cell");
         });
 
         //Setja upp myndir af slöngum og stigum
@@ -133,6 +110,7 @@ public class SlangaController {
     private void newGameHandler() {
         System.out.println("New Game button was pressed!");
         game.nyrLeikur();
+        fxMessage1.setText("Leikur í gangi!");
 
         //Setja default mynd af tening
         fxDice.getStyleClass().removeAll("one", "two", "three", "four", "five", "six");
