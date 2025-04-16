@@ -67,7 +67,7 @@ public class SlangaController {
                 Bindings.createStringBinding(() -> {
                     Leikmadur currentPlayer = game.currentPlayerProperty().get();
                     if (currentPlayer == null) {
-                        return "No hay jugadores en la partida";
+                        return "No players in game";
                     }
 
                     int currentBox = currentPlayer.getBox();

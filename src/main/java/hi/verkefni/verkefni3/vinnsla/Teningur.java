@@ -34,4 +34,12 @@ public class Teningur {
     public IntegerProperty diceProperty() {
         return numberPorperty;
     }
+
+    /**
+     * get aðferð sem skilar teningstölu sem int
+     * @return teningstala sem int
+     */
+    public int getDiceNumber() {
+        return diceNumber;
+    }
 }
