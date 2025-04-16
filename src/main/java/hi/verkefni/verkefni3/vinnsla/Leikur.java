@@ -193,6 +193,10 @@ public class Leikur {
         return null;
     }
 
+    public boolean isPlayersEmpty(){
+        return players.isEmpty();
+    }
+
     /**
      * Aðferð sem setur upp snáka og stiga
      */
