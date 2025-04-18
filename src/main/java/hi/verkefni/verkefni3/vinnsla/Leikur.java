@@ -12,6 +12,9 @@ import java.util.Scanner;
 
 public class Leikur {
 
+    //Observers fyrir observer pattern
+    private List<LeikurObserver> observers = new ArrayList<>();
+
     //Tilviksbreytur
     private List<Leikmadur> players;
     private Teningur dice;
@@ -117,8 +120,16 @@ public class Leikur {
     private void switchTurn() {
         currentTurn = (currentTurn + 1) % players.size();
         nextPlayer.set(players.get(currentTurn).getName());
+        notifyCurrentPlayerChanged(); //lætur vita að leikmaður afi breyst
+    }
 
-
+    /**
+     * hlustar hvort að það sé búið að skipta um leikman sem á að gera næst
+     */
+    private void notifyCurrentPlayerChanged() {
+        for (LeikurObserver observer : observers) {
+            observer.onCurrentPlayerChanged(currentPlayer.get());
+        }
     }
 
     //Get aðferðir
@@ -171,6 +182,18 @@ public class Leikur {
     }
 
     /**
+     * Get aðferðs sem skilar leikmann sem á ekki að gera
+     * @return Leikmapur sem á ekki að gera
+     */
+    public Leikmadur getOtherPlayer() {
+        if (getCurrentPlayer() == players.get(0)) {
+            return players.get(1);
+        } else {
+            return players.get(0);
+        }
+    }
+
+    /**
      * Get aðferð fyrir snáka/stiga
      * @return skilar hlut af klasanum SlongurStigar
      */
@@ -193,8 +216,28 @@ public class Leikur {
         return null;
     }
 
+    /**
+     * skilar hvort að það séu leikmenn í leiknum
+     * @return
+     */
     public boolean isPlayersEmpty(){
         return players.isEmpty();
+    }
+
+    /**
+     * hjálparaðferð fyrir aðra klasa til að bæta við listener
+     * @param observer
+     */
+    public void addObserver(LeikurObserver observer) {
+        observers.add(observer);
+    }
+
+    /**
+     * hjálapraðferp fyrir aðra klasa til að eyða litenera
+     * @param observer
+     */
+    public void removeObserver(LeikurObserver observer) {
+        observers.remove(observer);
     }
 
     /**

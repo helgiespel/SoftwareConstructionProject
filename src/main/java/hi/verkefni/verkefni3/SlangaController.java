@@ -2,6 +2,7 @@ package hi.verkefni.verkefni3;
 
 import hi.verkefni.verkefni3.vinnsla.Leikmadur;
 import hi.verkefni.verkefni3.vinnsla.Leikur;
+import hi.verkefni.verkefni3.vinnsla.LeikurObserver;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.scene.layout.GridPane;
 import java.util.List;
 import java.util.Random;
 
-public class SlangaController {
+public class SlangaController implements LeikurObserver {
     @FXML
     private Button fxDice;
     @FXML
@@ -30,6 +31,14 @@ public class SlangaController {
     private final int TOTAL_BOXES = 30;
     private final String[] TENINGS_MYNDIR = {"one", "two", "three", "four", "five", "six"};
     private final String[] BOX_COLOR = {"#1C1C1C", "#0B3D0A", "#2E8B57", "#6A8E22"};
+
+    @Override
+    public void onCurrentPlayerChanged(Leikmadur newPlayer) {
+        fxMessage1.setText(newPlayer.getName());
+        Leikmadur currentPlayer = game.getOtherPlayer();
+        int currentPlayerCurrentBox = currentPlayer.getBox();
+        fxMessage2.setText("Er á reit " + (currentPlayerCurrentBox));
+    }
 
     /**
      * initialize aðferð sem keyrir þegar viðmótinu er keyrt
@@ -53,6 +62,8 @@ public class SlangaController {
         // Byrja leik sjáfkrafa þegar application er startað
         game.nyrLeikur();
         System.out.println("Game strarted!");
+        fxMessage1.setText("Velkominn í");
+        fxMessage2.setText("Slöngur og stigar!");
 
         //Setja leikmenn á fyrsta reit
         updatePlayerImage(0, 1, 1);
@@ -62,14 +73,8 @@ public class SlangaController {
         fxNewGame.disableProperty().bind(game.gameFinishProperty().not());
         fxDice.disableProperty().bind(fxNewGame.disableProperty().not());
 
-        // Binda fxMessage1
-        fxMessage1.setText("Leikur í gangi!");
-
-        //Binda fxMessage2
-        fxMessage2.textProperty().bind(Bindings.
-                when(game.nextPlayerProperty().isEqualTo("Leikmaður 1")).
-                then("Leikmaður 1").
-                otherwise("Leikmaður 2"));
+        // Binda fxMessage1 og fxMessage2
+        game.addObserver(this);
 
         //Setja randum liti á reiti
         applyRandomColors();
